@@ -3,6 +3,7 @@ package com.example.halloffame.vm
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.mock.MockHallOfFame
 import com.example.data.repository.HallOfFameRepository
 import com.example.domain.game.Game
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +21,7 @@ class HallOfFameViewModel @Inject constructor(private val hallOfFameRepository: 
         viewModelScope.launch {
             try {
                 anyUseCaseInProgress.postValue(true)
-                getHallOfFameGamesSuccess.postValue(listOf()) // repository call
+                getHallOfFameGamesSuccess.postValue(MockHallOfFame.getMockHallOfFame())
             } catch (cause: Throwable) {
                 anyUseCaseFailure.postValue(cause)
             } finally {

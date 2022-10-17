@@ -8,33 +8,32 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.halloffame.ui.game.HallOfFameScreen
 import com.example.halloffame.ui.theme.HallOfFameTheme
+import com.example.halloffame.vm.HallOfFameViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            HallOfFameTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
-                }
+            val hallOfFameViewModel: HallOfFameViewModel = hiltViewModel()
+            val games = hallOfFameViewModel.getHallOfFameGamesSuccess.observeAsState().value
+            val progress = hallOfFameViewModel.anyUseCaseInProgress.observeAsState().value
+
+            LaunchedEffect(Unit) {
+                hallOfFameViewModel.getHallOfFameGames()
+            }
+
+            HallOfFameTheme() {
+                HallOfFameScreen(games, progress)
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    HallOfFameTheme {
-        Greeting("Android")
     }
 }

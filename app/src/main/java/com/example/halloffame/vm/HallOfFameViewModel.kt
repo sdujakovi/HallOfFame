@@ -21,7 +21,7 @@ class HallOfFameViewModel @Inject constructor(private val hallOfFameRepository: 
         viewModelScope.launch {
             try {
                 anyUseCaseInProgress.postValue(true)
-                getHallOfFameGamesSuccess.postValue(MockHallOfFame.getMockHallOfFame())
+                getHallOfFameGamesSuccess.postValue(hallOfFameRepository.getHallOfFame())
             } catch (cause: Throwable) {
                 anyUseCaseFailure.postValue(cause)
             } finally {
